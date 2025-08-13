@@ -1,0 +1,49 @@
+{
+  "expo": {
+    "name": "Memo",
+    "slug": "Memo",
+    "version": "1.0.0",
+    "userInterfaceStyle": "automatic",
+    "orientation": "portrait",
+    "icon":"./assets/image/memo-icon.png",
+    "splash": {
+      "image": "./assets/image/memo-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#252525"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.manoj.memo"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/image/memo-icon.png",
+        "backgroundColor": "#252525"
+      },
+      "package": "com.manoj.memo"
+    },
+    "web": {
+      "favicon": "./assets/image/memo-icon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "4045a31e-5deb-4189-b329-4a2d4723cc99"
+      }
+    },
+    "owner": "manoj-n",
+    "plugins": [
+      [
+      "expo-font",
+      {
+          "fonts": [
+            "./assets/Truculenta_18pt-Regular.ttf",
+            "./assets/Truculenta_28pt-Bold.ttf"
+          ]
+        }
+      ]
+    ]
+  }
+}
