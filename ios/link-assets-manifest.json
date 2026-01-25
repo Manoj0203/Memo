@@ -1,0 +1,21 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/Anaheim-Bold.ttf",
+      "sha1": "621a1b223e3ea0f18ba4dc30b18033c456068aa9"
+    },
+    {
+      "path": "assets/fonts/Anaheim-Regular.ttf",
+      "sha1": "3a4da3140f4a15948a9a4bf9d1e41968feb464f4"
+    },
+    {
+      "path": "assets/fonts/Anaheim-SemiBold.ttf",
+      "sha1": "82b5a292f61def8e7b5dabcc2888345e71e5c4b3"
+    },
+    {
+      "path": "assets/fonts/impact.ttf",
+      "sha1": "1cc231f6ba7e2c141e28db4eac92b211d4033df6"
+    }
+  ]
+}
