@@ -1,16 +1,27 @@
-import { StatusBar, StyleSheet, Text, TouchableOpacity, useColorScheme, View, Platform } from 'react-native';
+import { StatusBar, StyleSheet, useColorScheme, View, TouchableOpacity, Text } from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import notifee, { TimestampTrigger, TriggerType, RepeatFrequency, AuthorizationStatus } from '@notifee/react-native';
+import {onDisplayNotification} from './utils/notificationHandler'
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { EventType } from '@notifee/react-native';
+
+//Screens
+import Notes from './Screens/Notes';
+import Tasks from './Screens/Tasks';
+import TabManagement from './Screens/TabManagement'
+import PrivateNotes from './Screens/PrivateNotes'
+
+const Stack = createNativeStackNavigator();
+
 import React, { useState, useCallback, useEffect } from 'react';
-import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context'; 
-import notifee, { EventType } from '@notifee/react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider as PaperProvider } from 'react-native-paper';
 
 import SystemNavigationBar from 'react-native-system-navigation-bar';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
-import Notes from './Screens/Notes';
-import Tasks from './Screens/Tasks';
 
 import { cancelallnoti } from './utils/notificationhandler';
 
@@ -54,44 +65,14 @@ export default function App() {
         }, [isDarkMode]);
 
     return (
-        <SafeAreaProvider style={{backgroundColor:isDarkMode?'#252525':'#fff'}}>
-            <PaperProvider>
-                <SafeAreaView style={styles.contentContainer}>
-                    {/* Content */}
-                    <View style={styles.contentContainer}>
-                        {activeTab === 'Notes' ? <Notes /> : <Tasks />}
-                    </View>
-
-                    {/* Tabs */}
-                    <View style={[styles.tabBarContainer, {backgroundColor:isDarkMode?'#252525':'#fff'}]}>
-                        <TouchableOpacity onPress={() => setActiveTab('Notes')} style={styles.tabButton}>
-                            <MaterialIcons
-                                name={activeTab === 'Notes' ? 'notes' : 'notes'}
-                                size={22}
-                                color={activeTab === 'Notes' ? 'orange' : 'gray'}
-                            />
-                            <Text style={[
-                                styles.tabLabel,
-                                { color: activeTab === 'Notes' ? 'orange' : 'gray' },
-                                { fontFamily:'impact' } 
-                                ]}>Notes</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => setActiveTab('Tasks')} style={styles.tabButton}>
-                            <FontAwesome5
-                                name={activeTab === 'Tasks' ? 'tasks' : 'tasks'}
-                                size={20}
-                                color={activeTab === 'Tasks' ? 'orange' : 'gray'}
-                            />
-                            <Text style={[
-                                styles.tabLabel,
-                                { color: activeTab === 'Tasks' ? 'orange' : 'gray' },
-                                { fontFamily:'impact' } 
-                                ]}>Tasks</Text>
-                        </TouchableOpacity>
-                    </View>
-                </SafeAreaView>
-            </PaperProvider>
-        </SafeAreaProvider>
+        <NavigationContainer>
+			<Stack.Navigator initialRouteName="Tabs" screenOptions={{headerShown:false}}>
+				<Stack.Screen name='Notes' component={Notes} />
+				<Stack.Screen name="Tasks" component={Tasks} />
+				<Stack.Screen name="Tabs" component={TabManagement} />
+				<Stack.Screen name="PrivateNotes" component={PrivateNotes} />
+			</Stack.Navigator>
+		</NavigationContainer>
     );
 }
 

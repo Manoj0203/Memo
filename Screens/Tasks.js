@@ -801,7 +801,7 @@ const Tasks = () => {
     });
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <View style={{alignItems:'flex-end', marginRight:15, marginTop:10}}>
                 <TouchableOpacity onPress={() => setIsSettingsModalVisible(true)}>
                     <MaterialIcons name="settings" size={24} color={isDark?"#fff":'#000'} />
@@ -834,7 +834,7 @@ const Tasks = () => {
                         </View>
                     )} />
 
-            <FAB icon={'plus'} style={styles.fab} color='#fff' onPress={() => {setIsAddModalVisible(true); setAdded_Date(format(new Date(), 'dd-MMM-yyyy     hh:mm aa'))}} />
+            <FAB icon={'plus'} style={styles.fab} rippleColor={'#ffc123'} color='#fff' onPress={() => {setIsAddModalVisible(true); setAdded_Date(format(new Date(), 'dd-MMM-yyyy     hh:mm aa'))}} />
         
         <Snackbar visible={Snack}
             duration={1500}
@@ -1185,7 +1185,7 @@ const Tasks = () => {
                 </View>*/}
             </View>
         </Modal>
-    </View>
+    </SafeAreaView>
   )
 }
 
