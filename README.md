@@ -7,5 +7,5 @@ npm install
 # Using npm
 npx react-native run-android
 ```
-Current version code 5
-Current version number v1.0.2
+Current version code 12
+Current version number v2.1.3
