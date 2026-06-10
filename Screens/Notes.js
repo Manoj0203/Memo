@@ -181,15 +181,19 @@ export default function Notes() {
                         noteImageWidth: item?._imagewidth,
                     })}>
                     <View style={{ flexDirection: 'row', marginHorizontal: 10, alignItems: 'center', justifyContent: 'space-between' }}>
-                        <Text style={styles.listheading}>{item?._title}</Text>
-                        {item?._ispinned === 'Yes' && (
-                            <Entypo name="pin" size={18} color={'orange'} style={{ marginLeft: 5 }} />
+                        <Text numberOfLines={1} style={styles.listheading}>{item?._title}</Text>
+                        {item?._ispinned == 'Yes' && (
+                            <View style={styles.pinBadge}>
+                                <Entypo name="pin" size={13} color="#000" />
+                            </View>
                         )}
                     </View>
                     <View style={{ flexDirection: 'row', marginRight: 10, alignItems: 'center', justifyContent: 'space-between' }}>
                         <Text style={styles.listdate}>{item?._addeddate}</Text>
                         {item?._imageuri !== null && (
-                            <FontAwesome name="picture-o" size={18} color={'orange'} style={{ marginLeft: 5 }} />
+                            <View style={[styles.pinBadge, {top: 0, padding:4}]}>
+                                <FontAwesome name="picture-o" size={15} color={'#000'} style={{ marginLeft: 0 }} />
+                            </View>
                         )}
                     </View>
                     <Text style={styles.listnote} numberOfLines={3}>{gettxt(item?._notes)}</Text>
@@ -205,7 +209,7 @@ export default function Notes() {
         },
         Searchbar: {
             backgroundColor: isDark ? '#151515' : '#E6E6E6',
-            width: '93%',
+            width: '95%',
             borderRadius: 15,
             height: 45,
             marginBottom: 10,
@@ -220,7 +224,7 @@ export default function Notes() {
         fab: {
             position: 'absolute',
             margin: 16,
-            right: '5%',
+            right: '2%',
             bottom: '0%',
             backgroundColor: 'orange',
         },
@@ -237,7 +241,8 @@ export default function Notes() {
             fontFamily: 'Anaheim-Bold',
             fontSize: 25,
             marginBottom: 7,
-            color: isDark ? '#fff' : '#000'
+            color: isDark ? '#fff' : '#000',
+            marginRight:15
         },
         listdate: {
             fontFamily: 'Anaheim-SemiBold',
@@ -277,6 +282,15 @@ export default function Notes() {
         ModalIcons: {
             marginLeft: 10,
             color: isDark ? '#C6C6C6' : '#000'
+        },
+        pinBadge: {
+            position: 'absolute',
+            top: 8,
+            right: 0,
+            backgroundColor: 'orange',
+            borderRadius: 6,
+            padding: 3,
+            zIndex: 1,
         },
     });
 
@@ -330,6 +344,7 @@ export default function Notes() {
                 visible={Snack}
                 duration={1500}
                 onDismiss={() => setSnack(false)}
+                sidebg={{backgroundColor:'orange'}}
                 style={{ borderRadius: 15, bottom: '0%' }}>
                 Notes Added
             </Snackbar>
@@ -353,7 +368,7 @@ export default function Notes() {
                                 onPress={() => setIsOptionModalVisible(false)} />
                         </View>
                         <Divider />
-                        <View style={{ flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 10 }}>
+                        <View style={{ flexWrap: 'wrap', paddingHorizontal: 10 }}>
                             <TouchableOpacity onPress={handlePin} style={{ flexDirection: 'row', marginTop: 20, width: 175 }}>
                                 <Entypo style={[styles.ModalIcons, { marginTop: 3 }]} name="pin" size={20} />
                                 <Text style={{ marginLeft: 10, fontSize: 18, fontFamily: 'Anaheim-SemiBold', color: icontheme, marginTop: '-2.5%' }}>Pin/Unpin</Text>

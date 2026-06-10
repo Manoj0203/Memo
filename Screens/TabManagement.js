@@ -1,11 +1,12 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React, { useEffect } from "react";
-import { useColorScheme } from "react-native";
+import React from "react";
+import { Image, useColorScheme } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // Screens
 import Notes from "./Notes";
 import Tasks from "./Tasks";
+import CollabScreen from './CollabScreen';
 
 // Icons
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -20,8 +21,8 @@ export default function TabManagement() {
     const insets = useSafeAreaInsets();
 
     return (
-        <Tab.Navigator 
-            initialRouteName="Notes" 
+        <Tab.Navigator
+            initialRouteName="Notes"
             screenOptions={({ route }) => ({
                 headerShown: false,
                 tabBarHideOnKeyboard: true,
@@ -34,7 +35,7 @@ export default function TabManagement() {
                     marginBottom: 5,
                 },
                 tabBarStyle: {
-                    backgroundColor: bgColor, 
+                    backgroundColor: bgColor,
                     height: 60 + insets.bottom,
                     paddingBottom: insets.bottom,
                     borderTopWidth: 0,
@@ -43,17 +44,21 @@ export default function TabManagement() {
                 tabBarIcon: ({ color, size }) => {
                     if (route.name === "Notes") {
                         return <MaterialIcons
-                                name={'notes'}
-                                size={24}
-                                color={color}
-                            />;
+                            name={'notes'}
+                            size={24}
+                            color={color}
+                        />;
                     } else if (route.name === 'Tasks') {
                         return <FontAwesome5 name="tasks" size={22} color={color} />;
+                    } else if (route.name === 'Collab') {
+                        return <Image source={require('../assets/icons/collab.png')} resizeMode="contain"
+                            style={{ width: '85%', height: 150, tintColor: color }} />
                     }
                 },
             })}
         >
             <Tab.Screen name="Notes" component={Notes} />
+            <Tab.Screen name="Collab" component={CollabScreen} />
             <Tab.Screen name="Tasks" component={Tasks} />
         </Tab.Navigator>
     );

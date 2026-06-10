@@ -17,6 +17,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
+import Alerts from '../components/Alerts';
 
 const ASYNC_STORAGE_KEY = 'ASYNC_STORAGE_KEY_NOTES_Tasks';
 
@@ -58,6 +59,8 @@ const AddTasksScreen = () => {
     const [repeat_time, setRepeat_Time] = useState(mode === 'edit' ? taskRepeat || 'Today' : 'Today');
     const [selecteddate, setSelectedDate] = useState(undefined);
     const [isdatepickmodalvisible, setIsDatePickModalVisible] = useState(false);
+    const [entertitle, setEnterTitle] = useState(false);
+    const [wrongreminder, setWrongReminder] = useState(false);
 
     useEffect(() => {
         const backAction = () => {
@@ -88,6 +91,29 @@ const AddTasksScreen = () => {
     };
 
     const handleSaveAndGoBack = async () => {
+        const hasTitle = title.trim() !== '';
+        const hasTasks = checkboxes.length > 0;
+
+        if (!hasTitle && !hasTasks) {
+            navi.goBack();
+            return;
+        }
+
+        if (!hasTitle && hasTasks) {
+            setEnterTitle(true);
+            return;
+        }
+
+        if (hasTitle && !hasTasks) {
+            navi.goBack();
+            return;
+        }
+
+        if (selecteddate && new Date(selecteddate) <= new Date()) {
+            setWrongReminder(true);
+            return;
+        }
+
         if (mode === 'add') {
             await addTask();
         } else {
@@ -97,11 +123,6 @@ const AddTasksScreen = () => {
     };
 
     const addTask = async () => {
-        if (checkboxes.length === 0 || title.trim() === '') {
-            if (checkboxes.length === 0 && title.trim() === '') return;
-            Alert.alert('Memo', 'Enter Title and Task');
-            return;
-        }
 
         const curTasks = await loadTasks();
 
@@ -116,6 +137,7 @@ const AddTasksScreen = () => {
         };
 
         if (selecteddate) {
+            console.log(`summa ${typeof Date.now()}`)
             const dateObject = parse(newTask._reminder, 'dd-MMM-yyyy hh:mm aa', new Date());
             const hour24 = format(dateObject, 'H');
             onDisplayNotification(
@@ -258,10 +280,13 @@ const AddTasksScreen = () => {
         },
         checkboxItem: {
             flexDirection: 'row',
+            backgroundColor: isDark ? '#151515' : '#cecece',
             alignItems: 'center',
             justifyContent: 'space-between',
             paddingVertical: 8,
             paddingHorizontal: 5,
+            borderRadius: 10,
+            marginBottom: 5
         },
         checkboxTouchable: {
             flexDirection: 'row',
@@ -336,6 +361,8 @@ const AddTasksScreen = () => {
                     <TextInput
                         placeholder='Title'
                         maxLength={30}
+                        selectionColor="#ffb52cc5"
+                        selectionHandleColor="#ffb52cc5"
                         value={title}
                         onChangeText={setTitle}
                         style={styles.titleEntry}
@@ -357,6 +384,8 @@ const AddTasksScreen = () => {
                         style={styles.tasksEntry}
                         placeholder="Add new item here..."
                         placeholderTextColor={'gray'}
+                        selectionColor="#ffb52cc5"
+                        selectionHandleColor="#ffb52cc5"
                         value={inputText}
                         onChangeText={setInputText}
                         onSubmitEditing={handleAddCheckbox}
@@ -388,6 +417,32 @@ const AddTasksScreen = () => {
                     }
                 </View>
             </KeyboardAvoidingView>
+
+            {/* No Title */}
+            <Alerts
+                visible={entertitle}
+                borderRadius={10}
+                title='Memo'
+                body='Enter title to save tasks!'
+                width={'80%'}
+                onAlert={() => setEnterTitle(false)}
+                type='info'
+                alertText='Okay'
+                alertColor={isDark ? '#ff2525' : '#e00000'}
+                alertTextColor={'#fff'} />
+            
+            {/* Wrong reminder */}
+            <Alerts
+                visible={wrongreminder}
+                borderRadius={10}
+                title='Invalid Reminder'
+                body='Reminder time must set in future!'
+                width={'80%'}
+                onAlert={() => {setWrongReminder(false); setIsDatePickModalVisible(true);}}
+                type='info'
+                alertText='Change'
+                alertColor={isDark ? '#ff2525' : '#e00000'}
+                alertTextColor={'#fff'} />
 
             {/* Date Picker Modal */}
             <Modal

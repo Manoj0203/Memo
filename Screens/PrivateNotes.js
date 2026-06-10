@@ -1,17 +1,17 @@
 import 'react-native-get-random-values';
 import {
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  useColorScheme,
-  Modal,
-  Share,
-  KeyboardAvoidingView,
-  ScrollView,
-  Image,
-  Platform
+    FlatList,
+    StyleSheet,
+    Text,
+    View,
+    TouchableOpacity,
+    useColorScheme,
+    Modal,
+    Share,
+    KeyboardAvoidingView,
+    ScrollView,
+    Image,
+    Platform
 } from "react-native";
 import { format, } from 'date-fns';
 import React, { useState, useEffect, useRef } from "react";
@@ -38,12 +38,12 @@ export default function PrivateNotes() {
 
     const navi = useNavigation();
 
-    const [title,setTitle] = useState("");
-    const [notes,setNotes] = useState("");
+    const [title, setTitle] = useState("");
+    const [notes, setNotes] = useState("");
     const [added_date, setAdded_Date] = useState()
-    
-    const [allNotes,setAllNotes] = useState([]);
-    const [search,setSearch] = useState("");
+
+    const [allNotes, setAllNotes] = useState([]);
+    const [search, setSearch] = useState("");
 
     const [isaddmodalvisible, setIsAddModalVisible] = useState(false);
     const [isoptionmodalvisible, setIsOptionModalVisible] = useState(false);
@@ -52,7 +52,7 @@ export default function PrivateNotes() {
     const [selected_id_pinned, setSelected_ID_Pinned] = useState('');
 
     const scrollViewRef = useRef(null);
-    
+
 
     // -------------------------
     // ENCRYPT
@@ -63,12 +63,12 @@ export default function PrivateNotes() {
     };
 
     const decrypt = (cipher) => {
-        try{
-        const bytes = CryptoJS.AES.decrypt(cipher, SECRET_KEY);
-        const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-        return JSON.parse(decrypted);
-        }catch{
-        return [];
+        try {
+            const bytes = CryptoJS.AES.decrypt(cipher, SECRET_KEY);
+            const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+            return JSON.parse(decrypted);
+        } catch {
+            return [];
         }
     };
 
@@ -80,15 +80,15 @@ export default function PrivateNotes() {
 
         const data = await AsyncStorage.getItem(STORAGE_KEY);
 
-        if(data){
+        if (data) {
             const decrypted = decrypt(data);
             setAllNotes(sortNotes(decrypted));
         }
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         loadNotes();
-    },[]);
+    }, []);
 
     // -------------------------
     // SAVE NOTES
@@ -108,20 +108,20 @@ export default function PrivateNotes() {
 
     const addNote = async () => {
 
-        if(title.trim()==="" && notes.trim()===""){
-        setIsAddModalVisible(false);
-        return;
+        if (title.trim() === "" && notes.trim() === "") {
+            setIsAddModalVisible(false);
+            return;
         }
 
         const newNote = {
-        id: Date.now().toString(),
-        title,
-        notes,
-        added_date: added_date,
-        ispinned: 'No',
+            id: Date.now().toString(),
+            title,
+            notes,
+            added_date: added_date,
+            ispinned: 'No',
         };
 
-        const updated = sortNotes([newNote,...allNotes]);
+        const updated = sortNotes([newNote, ...allNotes]);
 
         setAllNotes(updated);
 
@@ -155,10 +155,10 @@ export default function PrivateNotes() {
 
         const updatedNotes = allNotes.map(item => {
             if (item.id === selected_id) {
-            return {
-                ...item,
-                ispinned: item.ispinned === 'Yes' ? 'No' : 'Yes'
-            };
+                return {
+                    ...item,
+                    ispinned: item.ispinned === 'Yes' ? 'No' : 'Yes'
+                };
             }
             return item;
         });
@@ -196,9 +196,11 @@ export default function PrivateNotes() {
             <View style={styles.listcontainer}>
                 <TouchableOpacity style={styles.listbtn} onPress={() => handleEdit(item?.id, item?.title, item?.notes, item?.added_date)} onLongPress={() => handleOption(item?.id, item?.ispinned)}  >
                     <View style={{ flexDirection: 'row', marginHorizontal: 10, alignItems: 'center', justifyContent: 'space-between' }}>
-                        <Text style={styles.listheading}>{item?.title}</Text>
+                        <Text numberOfLines={1} style={styles.listheading}>{item?.title}</Text>
                         {item?.ispinned === 'Yes' && (
-                            <Entypo name="pin" size={18} color={'orange'} style={{ marginLeft: 5 }} />
+                            <View style={styles.pinBadge}>
+                                <Entypo name="pin" size={13} color="#000" />
+                            </View>
                         )}
                     </View>
                     <Text style={styles.listdate}>{item?.added_date}</Text>
@@ -267,186 +269,196 @@ export default function PrivateNotes() {
     };
 
     const styles = StyleSheet.create({
-            container:
-            {
-                flex: 1,
-                backgroundColor: isDark ? '#252525' : '#fff'
+        container:
+        {
+            flex: 1,
+            backgroundColor: isDark ? '#252525' : '#fff'
+        },
+        Searchbar:
+        {
+            backgroundColor: isDark ? '#151515' : '#E6E6E6',
+            width: '93%',
+            borderRadius: 15,
+            height: 45,
+            marginBottom: 10,
+        },
+        TabTitile:
+        {
+            color: isDark ? "#fff" : '#000',
+            fontSize: 35,
+            fontFamily: 'impact',
+            marginLeft: 15,
+            marginBottom: 10
+        },
+        fab:
+        {
+            position: 'absolute',
+            margin: 16,
+            right: '5%',
+            bottom: '5%',
+            backgroundColor: isDark ? 'orange' : 'orange',
+        },
+        titleEntry:
+        {
+            color: isDark ? '#fff' : '#000',
+            fontSize: 25,
+            fontFamily: 'Anaheim-Bold',
+            backgroundColor: isDark ? '#252525' : '#fff',
+        },
+        dateText:
+        {
+            color: isDark ? 'gray' : '#000',
+            marginLeft: 12,
+            fontFamily: 'Anaheim-Regular',
+            fontSize: 17
+        },
+        notesEntry:
+        {
+            color: isDark ? '#fff' : '#000',
+            fontFamily: 'Anaheim-Regular',
+            height: '100%'
+        },
+        keyboardAvoidingContainer:
+        {
+            flex: 1,
+        },
+        scrollViewContent:
+        {
+            flexGrow: 1,
+            paddingHorizontal: 0,
+            paddingBottom: 75,
+        },
+        listcontainer:
+        {
+            alignItems: 'center',
+        },
+        listbtn:
+        {
+            backgroundColor: isDark ? "#151515" : '#E6E6E6',
+            // height:'auto',
+            marginBottom: 10,
+            borderRadius: 10,
+            width: '95%'
+        },
+        listheading:
+        {
+            fontFamily: 'Anaheim-Bold',
+            fontSize: 25,
+            marginBottom: 7,
+            color: isDark ? '#fff' : '#000',
+            marginRight: 15
+        },
+        listdate:
+        {
+            fontFamily: 'Anaheim-SemiBold',
+            fontSize: 17,
+            marginLeft: 10,
+            marginBottom: 7,
+            color: isDark ? 'gray' : '#858383'
+        },
+        listnote:
+        {
+            fontFamily: 'Anaheim-SemiBold',
+            fontSize: 17,
+            marginLeft: 10,
+            marginBottom: '5%',
+            color: isDark ? '#fff' : '#000'
+        },
+        modalView:
+        {
+            margin: 0,
+            backgroundColor: isDark ? '#252525' : '#fff',
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
+            padding: 0,
+            shadowColor: '#000',
+            shadowOffset: {
+                width: 0,
+                height: 2,
             },
-            Searchbar:
-            {
-                backgroundColor: isDark ? '#151515' : '#E6E6E6',
-                width: '93%',
-                borderRadius: 15,
-                height: 45,
-                marginBottom: 10,
-            },
-            TabTitile:
-            {
-                color: isDark ? "#fff" : '#000',
-                fontSize: 35,
-                fontFamily: 'impact',
-                marginLeft: 15,
-                marginBottom: 10
-            },
-            fab:
-            {
-                position: 'absolute',
-                margin: 16,
-                right: '5%',
-                bottom: '5%',
-                backgroundColor: isDark ? 'orange' : 'orange',
-            },
-            titleEntry:
-            {
-                color: isDark ? '#fff' : '#000',
-                fontSize: 25,
-                fontFamily: 'Anaheim-Bold',
-                backgroundColor: isDark ? '#252525' : '#fff',
-            },
-            dateText:
-            {
-                color: isDark ? 'gray' : '#000',
-                marginLeft: 12,
-                fontFamily: 'Anaheim-Regular',
-                fontSize: 17
-            },
-            notesEntry:
-            {
-                color: isDark ? '#fff' : '#000',
-                fontFamily: 'Anaheim-Regular',
-                height: '100%'
-            },
-            keyboardAvoidingContainer:
-            {
-                flex: 1,
-            },
-            scrollViewContent:
-            {
-                flexGrow: 1,
-                paddingHorizontal: 0,
-                paddingBottom: 75,
-            },
-            listcontainer:
-            {
-                alignItems: 'center',
-            },
-            listbtn:
-            {
-                backgroundColor: isDark ? "#151515" : '#E6E6E6',
-                // height:'auto',
-                marginBottom: 10,
-                borderRadius: 10,
-                width: '95%'
-            },
-            listheading:
-            {
-                fontFamily: 'Anaheim-Bold',
-                fontSize: 25,
-                marginBottom: 7,
-                color: isDark ? '#fff' : '#000'
-            },
-            listdate:
-            {
-                fontFamily: 'Anaheim-SemiBold',
-                fontSize: 17,
-                marginLeft: 10,
-                marginBottom: 7,
-                color: isDark ? 'gray' : '#858383'
-            },
-            listnote:
-            {
-                fontFamily: 'Anaheim-SemiBold',
-                fontSize: 17,
-                marginLeft: 10,
-                marginBottom: '5%',
-                color: isDark ? '#fff' : '#000'
-            },
-            modalView:
-            {
-                margin: 0,
-                backgroundColor: isDark ? '#252525' : '#fff',
-                borderTopLeftRadius: 20,
-                borderTopRightRadius: 20,
-                padding: 0,
-                shadowColor: '#000',
-                shadowOffset: {
-                    width: 0,
-                    height: 2,
-                },
-                shadowOpacity: 0.25,
-                shadowRadius: 4,
-                elevation: 5,
-                height: 230,
-                maxHeight: '75%',
-                width: '99%',
-            },
-            centeredView:
-            {
-                flex: 1,
-                justifyContent: 'flex-end',
-                alignItems: 'center',
-                backgroundColor: 'rgba(107, 107, 107, 0.4)'
-            },
-            ModalIcons:
-            {
-                marginLeft: 10,
-                color: isDark ? '#C6C6C6' : '#000'
-            },
-    
-            subtitle:
-            {
-                marginLeft: 17,
-                color: isDark ? "#C4BFBF" : "fff",
-                fontFamily: 'Anaheim-Bold',
-                fontSize: 18
-            },
-            settingsbtn:
-            {
-                backgroundColor: isDark ? '#151515' : '#E6E6E6',
-                width: '100%',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                borderRadius: 15,
-            },
-            settingtext:
-            {
-                marginTop: 7,
-                color: isDark ? '#fff' : '#000',
-                fontFamily: 'Anaheim-SemiBold',
-                fontSize: 20,
-                marginLeft: 15,
-            },
-            TabTitle:
-            {
-                color: isDark ? "#fff" : '#000',
-                fontSize: 35,
-                fontFamily: 'impact',
-                marginLeft: 15,
-                marginBottom: 10
-            },
-            feedbackentry:
-            {
-                marginHorizontal: 15,
-                minHeight: 255,
-                backgroundColor: '#252525',
-            },
-        });
+            shadowOpacity: 0.25,
+            shadowRadius: 4,
+            elevation: 5,
+            height: 230,
+            maxHeight: '75%',
+            width: '99%',
+        },
+        centeredView:
+        {
+            flex: 1,
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            backgroundColor: 'rgba(107, 107, 107, 0.4)'
+        },
+        ModalIcons:
+        {
+            marginLeft: 10,
+            color: isDark ? '#C6C6C6' : '#000'
+        },
+
+        subtitle:
+        {
+            marginLeft: 17,
+            color: isDark ? "#C4BFBF" : "fff",
+            fontFamily: 'Anaheim-Bold',
+            fontSize: 18
+        },
+        settingsbtn:
+        {
+            backgroundColor: isDark ? '#151515' : '#E6E6E6',
+            width: '100%',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            borderRadius: 15,
+        },
+        settingtext:
+        {
+            marginTop: 7,
+            color: isDark ? '#fff' : '#000',
+            fontFamily: 'Anaheim-SemiBold',
+            fontSize: 20,
+            marginLeft: 15,
+        },
+        TabTitle:
+        {
+            color: isDark ? "#fff" : '#000',
+            fontSize: 35,
+            fontFamily: 'impact',
+            marginLeft: 15,
+            marginBottom: 10
+        },
+        feedbackentry:
+        {
+            marginHorizontal: 15,
+            minHeight: 255,
+            backgroundColor: '#252525',
+        },
+        pinBadge: {
+            position: 'absolute',
+            top: 8,
+            right: 0,
+            backgroundColor: 'orange',
+            borderRadius: 6,
+            padding: 3,
+            zIndex: 1,
+        },
+    });
 
     return (
 
         <SafeAreaView style={styles.container}>
 
-        <View style={{padding:12}}>
-            <TouchableOpacity onPress={()=>navi.goBack()}>
-            <Feather name="arrow-left" size={24} color={icontheme}/>
-            </TouchableOpacity>
-        </View>
+            <View style={{ padding: 12 }}>
+                <TouchableOpacity onPress={() => navi.goBack()}>
+                    <Feather name="arrow-left" size={24} color={icontheme} />
+                </TouchableOpacity>
+            </View>
 
-        <Text style={styles.TabTitle}>SAFE</Text>
+            <Text style={styles.TabTitle}>SAFE</Text>
 
-        <View style={{ alignItems: 'center' }}>
+            <View style={{ alignItems: 'center' }}>
                 <Searchbar
-                    placeholder='Search Notes'
+                    placeholder='Search Safe'
                     placeholderTextColor={isDark ? '#e6e6e6aa' : 'gray'}
                     inputStyle={{ marginTop: -7, fontSize: 17, fontFamily: 'Anaheim-SemiBold', color: icontheme }}
                     style={styles.Searchbar}
@@ -458,81 +470,81 @@ export default function PrivateNotes() {
 
             <FlatList
                 data={allNotes.filter(n =>
-                n.title.toLowerCase().includes(search.toLowerCase())
+                    n.title.toLowerCase().includes(search.toLowerCase())
                 )}
                 showsVerticalScrollIndicator={false}
                 renderItem={renderNotes}
-                keyExtractor={(item)=>item.id}
+                keyExtractor={(item) => item.id}
                 keyboardDismissMode='on-drag'
                 ListEmptyComponent={() => (
                     <View style={{ flex: 1, alignItems: 'center', marginTop: '65%' }}>
                         <Text style={{ color: isDark ? '#aaa' : '#888', fontSize: 17, fontFamily: 'Anaheim-Bold' }}>
-                            {search ? 'No matching results' : "Press '+' to add notes"}
+                            {search ? 'No matching results' : "Press '+' to add Safe"}
                         </Text>
                     </View>
                 )}
             />
 
             <FAB icon={'plus'} style={styles.fab} rippleColor={'#ffc123'} color='#fff' onPress={() => { setIsAddModalVisible(true); setAdded_Date(format(new Date(), 'dd-MMM-yyyy     hh:mm aa')) }} />
-        
 
-        {/* <FAB
+
+            {/* <FAB
             icon="plus"
             style={styles.fab}
             color="#fff"
             onPress={()=>setIsAddModalVisible(true)}
         /> */}
 
-        {/* ADD MODAL */}
-        <Modal visible={isaddmodalvisible}
-            onRequestClose={handleAddNotes}
-            animationType='slide' >
-            <SafeAreaView style={{ flex: 1, backgroundColor: isDark ? '#252525' : '#fff' }}>
-                <View style={{ padding: 12, flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <TouchableOpacity onPress={handleAddNotes}>
-                        <Feather name="arrow-left" size={24} color={icontheme} />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={handleShare}>
-                        <Ionicons name="share-outline" size={24} color={icontheme} />
-                    </TouchableOpacity>
-                </View>
-                <KeyboardAvoidingView style={styles.keyboardAvoidingContainer}
-                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-                    <ScrollView contentContainerStyle={styles.scrollViewContent}
-                        ref={scrollViewRef}
-                        keyboardShouldPersistTaps='always'
-                        decelerationRate="fast"
-                        removeClippedSubviews={true}>
-        
-                        <TextInput
-                            placeholder={"Title"}
-                            placeholderTextColor={'gray'}
-                            selectionColor='#ffb52cc5'
-                            selectionHandleColor={'#ffb52cc5'}
-                            underlineColor={isDark ? '#252525' : "#fff"}
-                            activeUnderlineColor={isDark ? '#252525' : "#fff"}
-                            value={title}
-                            onChangeText={(text) => setTitle(text)}
-                            cursorColor={isDark ? "#abababff" : "#252525"}
-                            style={styles.titleEntry}
-                            contentStyle={{ fontSize: 25, backgroundColor: isDark ? '#252525' : '#fff', fontFamily: 'Anaheim-SemiBold', color:isDark?"#fff":"#000" }} />
-        
-                        <Text style={styles.dateText}>{added_date}</Text>
-        
-                        <TextInput
-                            placeholder={"Start Typing..."}
-                            placeholderTextColor={'gray'}
-                            selectionColor='#ffb52cc5'
-                            selectionHandleColor={'#ffb52cc5'}
-                            underlineColor={isDark ? '#252525' : "#fff"}
-                            activeUnderlineColor={isDark ? '#252525' : "#fff"}
-                            value={notes}
-                            onChangeText={(text) => setNotes(text)}
-                            cursorColor={isDark ? "#abababff" : "#252525"}
-                            multiline
-                            style={styles.notesEntry}
-                            contentStyle={{ fontSize: 18, backgroundColor: isDark ? '#252525' : '#fff', fontFamily: 'Anaheim-SemiBold', marginLeft: -8,  color:isDark?"#fff":"#000"}} />
-        
+            {/* ADD MODAL */}
+            <Modal visible={isaddmodalvisible}
+                onRequestClose={handleAddNotes}
+                animationType='slide' >
+                <SafeAreaView style={{ flex: 1, backgroundColor: isDark ? '#252525' : '#fff' }}>
+                    <View style={{ padding: 12, flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <TouchableOpacity onPress={handleAddNotes}>
+                            <Feather name="arrow-left" size={24} color={icontheme} />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={handleShare}>
+                            <Ionicons name="share-outline" size={24} color={icontheme} />
+                        </TouchableOpacity>
+                    </View>
+                    <KeyboardAvoidingView style={styles.keyboardAvoidingContainer}
+                        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+                        <ScrollView contentContainerStyle={styles.scrollViewContent}
+                            ref={scrollViewRef}
+                            keyboardShouldPersistTaps='always'
+                            decelerationRate="fast"
+                            removeClippedSubviews={true}>
+
+                            <TextInput
+                                placeholder={"Title"}
+                                placeholderTextColor={'gray'}
+                                selectionColor='#ffb52cc5'
+                                selectionHandleColor={'#ffb52cc5'}
+                                underlineColor={isDark ? '#252525' : "#fff"}
+                                activeUnderlineColor={isDark ? '#252525' : "#fff"}
+                                value={title}
+                                onChangeText={(text) => setTitle(text)}
+                                cursorColor={isDark ? "#abababff" : "#252525"}
+                                style={styles.titleEntry}
+                                contentStyle={{ fontSize: 25, backgroundColor: isDark ? '#252525' : '#fff', fontFamily: 'Anaheim-SemiBold', color: isDark ? "#fff" : "#000" }} />
+
+                            <Text style={styles.dateText}>{added_date}</Text>
+
+                            <TextInput
+                                placeholder={"Start Typing..."}
+                                placeholderTextColor={'gray'}
+                                selectionColor='#ffb52cc5'
+                                selectionHandleColor={'#ffb52cc5'}
+                                underlineColor={isDark ? '#252525' : "#fff"}
+                                activeUnderlineColor={isDark ? '#252525' : "#fff"}
+                                value={notes}
+                                onChangeText={(text) => setNotes(text)}
+                                cursorColor={isDark ? "#abababff" : "#252525"}
+                                multiline
+                                style={styles.notesEntry}
+                                contentStyle={{ fontSize: 18, backgroundColor: isDark ? '#252525' : '#fff', fontFamily: 'Anaheim-SemiBold', marginLeft: -8, color: isDark ? "#fff" : "#000" }} />
+
                         </ScrollView>
                         {/* <View style={{ flexDirection: 'row', gap: 10, paddingVertical: 10 }}>
                             <TouchableOpacity style={{marginLeft:'5%'}} onPress={() => setIsPaintModalVisible(true)}>
@@ -585,7 +597,7 @@ export default function PrivateNotes() {
                                 onChangeText={(text) => setTitle(text)}
                                 cursorColor={isDark ? "#abababff" : "#252525"}
                                 style={styles.titleEntry}
-                                contentStyle={{ fontSize: 25, backgroundColor: isDark ? '#252525' : '#fff', fontFamily: 'Anaheim-SemiBold', color:isDark?"#fff":"#000" }} />
+                                contentStyle={{ fontSize: 25, backgroundColor: isDark ? '#252525' : '#fff', fontFamily: 'Anaheim-SemiBold', color: isDark ? "#fff" : "#000" }} />
 
                             <Text style={styles.dateText}>{added_date}</Text>
 
@@ -601,7 +613,7 @@ export default function PrivateNotes() {
                                 cursorColor={isDark ? "#abababff" : "#252525"}
                                 multiline
                                 style={styles.notesEntry}
-                                contentStyle={{ fontSize: 18, backgroundColor: isDark ? '#252525' : '#fff', fontFamily: 'Anaheim-SemiBold', marginLeft: -8,  color:isDark?"#fff":"#000" }} />
+                                contentStyle={{ fontSize: 18, backgroundColor: isDark ? '#252525' : '#fff', fontFamily: 'Anaheim-SemiBold', marginLeft: -8, color: isDark ? "#fff" : "#000" }} />
 
                         </ScrollView>
                         {/* <View style={{ flexDirection: 'row', gap: 10, paddingVertical: 10 }}>

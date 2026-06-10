@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "264923450484",
+    "firebase_url": "https://connect-9cd26-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "connect-9cd26",
+    "storage_bucket": "connect-9cd26.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:264923450484:android:bc2f22054ce3171dfd5521",
+        "android_client_info": {
+          "package_name": "com.develax.memo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "264923450484-46d623f8k17452om57mi3sfu2h100916.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.develax.memo",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "264923450484-4l9a9sf530nq2brsq4p5ckj9v4v76q80.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVATyAsnwciUTZbXnbP-50YXhPoJkakH8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "264923450484-4l9a9sf530nq2brsq4p5ckj9v4v76q80.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

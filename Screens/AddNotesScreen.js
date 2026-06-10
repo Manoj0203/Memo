@@ -43,8 +43,8 @@ const AddNotesScreen = () => {
 
     const [noteId] = useState(existingId || Date.now().toString());
     const [added_date] = useState(mode === 'edit' ? noteDate : curDate);
-    const [title, setTitle] = useState(mode === 'edit' ? noteTitle || '' : '');
-    const [notes, setNotes] = useState(mode === 'edit' ? noteContent || '' : '');
+    const [title, setTitle] = useState(mode === 'edit' ? noteTitle === 'No Title' ? '' : noteTitle : '');
+    const [notes, setNotes] = useState(mode === 'edit' ? noteContent==='No Notes' ? '' : noteContent : '');
     const [imageUri, setImageUri] = useState(mode === 'edit' ? noteImageUri || null : null);
     const [dumimageUri, setDumImageUri] = useState(null);
     const [imageheight, setImageHeight] = useState(mode === 'edit' ? noteImageHeight || 0 : 0);
@@ -126,8 +126,8 @@ const AddNotesScreen = () => {
 
         const newNote = {
             _id: id,
-            _title: title,
-            _notes: notes,
+            _title: title || 'No Title',
+            _notes: notes || 'No Notes',
             _addeddate: added_date,
             _ispinned: 'No',
             _imageuri: permanentImageUri,
@@ -159,8 +159,8 @@ const AddNotesScreen = () => {
             if (item._id === noteId) {
                 return {
                     ...item,
-                    _title: title,
-                    _notes: notes,
+                    _title: title || 'No Title',
+                    _notes: notes || 'No Notes',
                     _imageuri: imageUri,
                     _imageheight: imageheight,
                     _imagewidth: imagewidth,

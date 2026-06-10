@@ -1,5 +1,6 @@
-import { StyleSheet, Text, View, useColorScheme, TouchableOpacity, Animated } from 'react-native'
-import React, { useRef, useEffect } from 'react';
+import { StyleSheet, Text, View, useColorScheme, TouchableOpacity, Animated, TextInput } from 'react-native'
+import React, { useRef, useEffect, useState } from 'react';
+import Entypo from "react-native-vector-icons/Entypo";
 
 const Alerts = ({ visible,
     borderRadius,
@@ -12,9 +13,18 @@ const Alerts = ({ visible,
     onCancel,
     alertText = 'Alert',
     onAlert,
+    type = 'alert',
+    alertColor,
+    onExtraButton,
+    alertTextColor,
+    needPassword,
 }) => {
 
     const isDark = useColorScheme() === 'dark';
+    const placeholdercolor = isDark ? '#acacacff' : '#7e7e7eff'
+
+    const [password, setPassword] = useState('');
+    const [showpasswd, setShowPasswd] = useState(false)
 
     //Animation
     const scaleAnim = useRef(new Animated.Value(0.5)).current;
@@ -28,7 +38,7 @@ const Alerts = ({ visible,
                 tension: 80,
             }).start();
         }
-        else{
+        else {
             scaleAnim.setValue(0.8);
         }
     }, [visible]);
@@ -89,18 +99,18 @@ const Alerts = ({ visible,
             fontFamily: 'Anaheim-Regular',
         },
         deleteBtn: {
-            backgroundColor: isDark ? '#ff2525' : '#e00000',
+            backgroundColor: type == 'alert' || type == 'conflict' ? isDark ? '#ff2525' : '#e00000' : alertColor || 'orange',
             paddingVertical: '1.5%',
             paddingHorizontal: '3%',
-            borderRadius: borderRadius * 0.5
+            borderRadius: borderRadius * 0.5,
+            marginBottom: 5
         },
         deleteBtnTxt: {
             fontFamily: 'Anaheim-Regular',
-            color: '#fff'
+            color: type == 'alert' || type == 'conflict' ? '#fff' : alertTextColor || '#000',
         }
     })
 
-    console.log(visible);
     if (!visible) return null;
 
     return (
@@ -116,13 +126,99 @@ const Alerts = ({ visible,
                 <Text style={styles.titletxt}>{title}</Text>
                 <Text style={styles.body}>{body}</Text>
 
-                <View style={{ flexDirection: 'row', gap: 13, justifyContent: actionButtonAlign, alignItems: 'center' }}>
-                    <TouchableOpacity onPress={onCancel}>
-                        <Text style={styles.cancelBtntxt}>Cancel</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={onAlert} style={styles.deleteBtn}>
-                        <Text style={styles.deleteBtnTxt}>{alertText}</Text>
-                    </TouchableOpacity>
+                {
+                    needPassword && (
+                        <View
+                            style={{
+                                backgroundColor: isDark ? '#666666dc' : '#dadadadc',
+                                borderRadius: 8,
+                                marginVertical: 6,
+                                minWidth: '80%',
+                                minHeight: '5%',
+                                justifyContent: 'space-between',
+                                flexDirection: 'row',
+                            }}
+                        >
+                            <TextInput
+                                style={{
+                                    color: isDark ? '#fff' : '#000',
+                                    width: '65%',
+                                    fontFamily: 'Anaheim-SemiBold',
+                                }}
+                                placeholder="Password"
+                                value={password}
+                                onChangeText={setPassword}
+                                secureTextEntry={!showpasswd}
+                                placeholderTextColor={placeholdercolor}
+                            />
+
+                            <TouchableOpacity
+                                onPress={() => setShowPasswd(!showpasswd)}
+                            >
+                                {showpasswd ? (
+                                    <Entypo
+                                        name="eye"
+                                        size={20}
+                                        color={placeholdercolor}
+                                        style={{
+                                            alignSelf: 'center',
+                                            top: '22%',
+                                            marginRight: '5%',
+                                            justifyContent: 'center',
+                                        }}
+                                    />
+                                ) : (
+                                    <Entypo
+                                        name="eye-with-line"
+                                        size={20}
+                                        color={placeholdercolor}
+                                        style={{
+                                            alignSelf: 'center',
+                                            top: '22%',
+                                            marginRight: '5%',
+                                            justifyContent: 'center',
+                                        }}
+                                    />
+                                )}
+                            </TouchableOpacity>
+                        </View>
+                    )
+                }
+
+                <View style={{ flexDirection: 'row', gap: 13, justifyContent: actionButtonAlign, alignItems: 'center', marginTop: '3%' }}>
+                    {
+                        type == 'alert' || type == 'conflict' ?
+                            <TouchableOpacity onPress={onCancel}>
+                                <Text style={styles.cancelBtntxt}>Cancel</Text>
+                            </TouchableOpacity>
+                            : null
+                    }
+                    {
+                        type == 'conflict' ?
+                            <TouchableOpacity onPress={onExtraButton} style={[styles.deleteBtn, { backgroundColor: 'orange' }]}>
+                                <Text style={[styles.deleteBtnTxt, { color: 'black' }]}>{'View Changes'}</Text>
+                            </TouchableOpacity>
+                            :
+                            null
+                    }
+                    {
+                        type == 'conflict' || type == 'alert' || type == 'info' ?
+                            <TouchableOpacity
+                                onPress={() => {
+                                    if (needPassword) {
+                                        onAlert(password);
+                                        setPassword('');
+                                    } else {
+                                        onAlert();
+                                    }
+                                }}
+                                style={styles.deleteBtn}
+                            >
+                                <Text style={styles.deleteBtnTxt}>{alertText}</Text>
+                            </TouchableOpacity>
+                            :
+                            null
+                    }
                 </View>
             </Animated.View>
         </View>
