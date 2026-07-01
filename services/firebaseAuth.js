@@ -14,12 +14,12 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDzywwaAKQUI3IwqyVK03-lNk2RFKSKnQM",
-  authDomain: "connect-9cd26.firebaseapp.com",
-  projectId: "connect-9cd26",
-  storageBucket: "connect-9cd26.firebasestorage.app",
-  messagingSenderId: "264923450484",
-  appId: "1:264923450484:web:e9767812d97fbe81fd5521",
+  apiKey: "AIFKSKnQM",
+  authDomain: "concom",
+  projectId: "c",
+  storageBucket: "ce.app",
+  messagingSenderId: "24",
+  appId: "1:d5521",
 };
 
 let app;
